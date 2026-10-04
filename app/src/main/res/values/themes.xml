@@ -1,0 +1,9 @@
+<resources><style name="Theme.KillApps" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="colorPrimary">#416651</item><item name="colorSecondary">#526457</item>
+    <item name="colorOnPrimary">#FFFFFF</item><item name="colorSecondaryContainer">#D7EADB</item>
+    <item name="colorSurface">#F5F8F2</item><item name="colorOnSurface">#19211B</item>
+    <item name="colorOnSurfaceVariant">#444E45</item><item name="colorPrimaryContainer">#C3EACD</item>
+    <item name="colorOnSecondaryContainer">#132819</item><item name="colorOutline">#727D73</item>
+    <item name="android:fontFamily">sans</item><item name="android:windowLightStatusBar">true</item>
+    <item name="android:statusBarColor">#F5F8F2</item><item name="android:navigationBarColor">#F5F8F2</item>
+</style></resources>

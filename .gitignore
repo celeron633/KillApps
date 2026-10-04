@@ -1,0 +1,31 @@
+# Gradle and Android build output (keep gradle/wrapper/ tracked)
+.gradle/
+.kotlin/
+build/
+.externalNativeBuild/
+.cxx/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.hprof
+
+# Local SDK configuration and downloaded development tools
+local.properties
+/.tools/
+/dist/
+
+# IDE and machine-specific files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Signing credentials
+*.jks
+*.keystore
+keystore.properties
+signing.properties
