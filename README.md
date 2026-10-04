@@ -1,29 +1,113 @@
+<p align="center">
+  <img src="docs/icon.svg" width="88" height="88" alt="KillApps icon">
+</p>
+
 # KillApps
 
-Android 8.0+ 应用管理工具，包名 `com.android.killapps`。采用 Material Design 3，支持明暗主题、中英双语、用户／系统应用筛选、白名单和黑名单。
+**Android 8.0+ · Material Design 3 · 中文 / English · Apache License 2.0**
 
-- 自动模式优先使用 root，以 `am force-stop` 停止应用。
-- 无 root 时使用使用情况访问权限生成近期活动候选，并由辅助功能依次操作系统“强行停止”按钮。
-- 名单独立持久保存；支持本次勾选、搜索、开始前复查、取消队列和逐项结果。
-- 默认关闭系统应用筛选，自动保护核心应用。不含广告、统计或网络权限。
+[简体中文](#简体中文) | [English](#english) | [界面预览 / Screenshots](#screenshots)
 
-## 构建与安装
+<a id="screenshots"></a>
 
-使用 Android Studio 打开目录，设置 Gradle JDK 为 **17**。本项目使用 SDK 35、AGP 8.7.3、Gradle 8.9；`local.properties` 指向本机 SDK。
+## 界面预览 / Screenshots
+
+| 应用列表 / App list | 设置 / Settings |
+| :---: | :---: |
+| <img src="docs/home-zh.png" width="280" alt="KillApps 中文首页：运行应用、类型筛选与批量停止 / Chinese app list with filters and batch stop"> | <img src="docs/settings-zh.png" width="280" alt="KillApps 中文设置：授权、停止方式、黑白名单与语言 / Chinese settings for access, stop methods, lists and language"> |
+
+## 简体中文
+
+KillApps 是一款支持 **Android 8.0 及以上**的开源应用管理工具。通过 Root 或辅助功能批量停止应用，提供用户／系统应用筛选、黑白名单和逐项处理结果。
+
+### 功能
+
+- **Root 优先**：自动模式优先使用已授权的 Root；也可选择仅 Root 或仅辅助功能。
+- **辅助功能停止**：无 Root 时，依次打开系统应用详情并操作“强行停止”及确认按钮。
+- **可控的应用筛选**：按名称或包名搜索，筛选用户／系统应用，勾选本次需要停止的应用。
+- **独立黑白名单**：白名单保留指定应用；黑名单模式只停止名单中的应用。两份名单分别保存。
+- **任务进度与结果**：开始前重新检测，支持取消剩余队列，显示成功、失败及跳过数量。
+- **MD3 界面**：支持系统明暗主题、中文与英文，以及跟随系统语言。
+- **本机运行**：无广告、无统计、无网络权限；名单与设置保存在设备上。
+
+默认只筛选用户应用，并自动保护自身、桌面、输入法及已启用的辅助功能服务等关键应用。
+
+### 使用方式
+
+1. 首次启动按提示授权：Root 可用时可直接使用；无 Root 时需要使用情况访问权限和辅助功能。
+2. 在右上角设置中选择停止方式、名单模式，并编辑需要保留或停止的应用名单。
+3. 在首页筛选、勾选应用，点击“开始”，确认后逐个停止。
+4. 查看任务结果；运行期间可取消尚未处理的应用，辅助功能模式下也可通过浮条取消。
+
+无 Root 时，列表根据最近 24 小时的活动生成候选，**不等于完整的运行进程列表**。强行停止可能中断应用通知和后台任务，直到再次打开应用。辅助功能已适配中英系统文案，其他厂商 ROM 的设置页面需要额外验证。任务结果保存在当前进程内，重启进程后清空。
+
+### 构建与安装
+
+使用 Android Studio 打开项目，选择 **JDK 17** 并安装 **Android SDK 35**。项目使用 AGP 8.7.3 和 Gradle 8.9，已包含 Gradle Wrapper；`local.properties` 指向本机 SDK。
+
+在 Windows PowerShell 中执行：
 
 ```powershell
 ./gradlew.bat :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-设备测试可另外构建 `:test-fixture:assembleDebug`；该模块是可丢弃的停止目标，不会打包进 KillApps。
+包名：`com.android.killapps`。设备测试可另外构建 `:test-fixture:assembleDebug`；该模块提供可丢弃的停止目标，不会打包进 KillApps。
 
-首次启动请根据提示授予 root 或使用情况访问权限和辅助功能。在设置中可切换语言、停止方式、名单模式并编辑名单。白名单中的应用不关闭；黑名单模式只关闭名单内应用。
-
-## 文档
+### 文档与许可证
 
 - [产品流程与筛选规则](docs/product-flow.md)
 - [开发记录与平台限制](docs/development.md)
 - [真机验证记录](docs/testing.md)
 
-无 root 的近期活动候选不等于完整运行进程列表。辅助功能兼容中英系统文案；不同 ROM 设置结构需要逐机验证。当前任务结果保存在进程内存，名单和设置保存在本机。
+本项目采用 **Apache License 2.0**，完整条款见 [LICENSE](LICENSE)。
+
+---
+
+## English
+
+KillApps is an open-source app management tool for **Android 8.0 and newer**. It stops selected apps in batches using root or accessibility, with user/system app filters, whitelists, blacklists, and per-app results.
+
+### Features
+
+- **Prefer root**: automatic mode prioritizes authorized root access. Root-only and accessibility-only modes are also available.
+- **Accessibility automation**: without root, opens each app’s system details screen and clicks Force stop and its confirmation.
+- **App selection**: search by name or package, filter user/system apps, and select the apps to stop in the current session.
+- **Separate lists**: whitelisted apps are kept; blacklist mode stops only listed apps. Both lists are saved independently.
+- **Progress and results**: rechecks targets before starting, supports cancelling the remaining queue, and reports stopped, failed, and skipped counts.
+- **Material Design 3**: supports system light/dark themes, Chinese and English, and following the system language.
+- **Local operation**: no ads, analytics, or network permission. Lists and settings remain on the device.
+
+Only user apps are included by default. KillApps automatically protects itself, the home app, input method, enabled accessibility services, and other essential apps.
+
+### Getting started
+
+1. Follow the access setup on first launch. Authorized root can be used directly; without root, enable usage access and accessibility.
+2. Open Settings from the top-right menu to choose a stop method, select a list mode, and edit the apps to keep or stop.
+3. Filter and select apps on the home screen, then tap Start and confirm the batch.
+4. Review the results. You can cancel apps still in the queue; accessibility mode also provides a floating cancel control.
+
+Without root, candidates are based on activity in the last 24 hours and **are not a complete list of running processes**. Force-stopping an app may interrupt notifications and background tasks until it is reopened. Accessibility supports Chinese and English system labels; other manufacturers’ settings screens require additional verification. Task results are kept in memory and cleared when the app process restarts.
+
+### Build and install
+
+Open the project in Android Studio, select **JDK 17**, and install **Android SDK 35**. The project uses AGP 8.7.3 and Gradle 8.9, with the Gradle Wrapper included. Set the local SDK path in `local.properties`.
+
+Run in Windows PowerShell:
+
+```powershell
+./gradlew.bat :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+Package name: `com.android.killapps`. For device testing, build `:test-fixture:assembleDebug` separately. This module provides a disposable stop target and is not included in the KillApps APK.
+
+### Documentation and license
+
+The following development documents are currently written in Chinese:
+
+- [Product flow and selection rules](docs/product-flow.md)
+- [Development notes and platform limitations](docs/development.md)
+- [Device verification report](docs/testing.md)
+
+Licensed under the **Apache License 2.0**. See [LICENSE](LICENSE) for the full terms.
