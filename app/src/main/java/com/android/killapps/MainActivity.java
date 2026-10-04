@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                     String tag = new String[]{"", "en", "zh"}[n]; prefs.edit().putString("language", tag).apply(); AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag));
                 }));
         setting(R.string.results, "", this::showResults);
-        setting(R.string.about, getString(R.string.app_name), () -> new MaterialAlertDialogBuilder(this).setTitle(R.string.about).setMessage(R.string.about_body).setPositiveButton(R.string.close, null).show());
+        setting(R.string.about, getString(R.string.app_name), () -> new MaterialAlertDialogBuilder(this).setTitle(R.string.about).setMessage(getString(R.string.about_body, BuildConfig.VERSION_NAME)).setPositiveButton(R.string.close, null).show());
     }
     private void setting(int title, String description, Runnable action) {
         LinearLayout row = column(); row.setPadding(0, dp(12), 0, dp(12)); row.addView(text(title, 18, true));

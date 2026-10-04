@@ -28,6 +28,21 @@ public class StopAccessibilityService extends AccessibilityService {
     private boolean batchActive;
     private View overlay;
     private TextView overlayStatus;
+    private String[] confirmLabels;
+    private final PositiveButtonFinder<AccessibilityNodeInfo> positiveButtons = new PositiveButtonFinder<>(
+            new PositiveButtonFinder.Tree<AccessibilityNodeInfo>() {
+                public CharSequence text(AccessibilityNodeInfo n) { return n.getText(); }
+                public CharSequence description(AccessibilityNodeInfo n) { return n.getContentDescription(); }
+                public String id(AccessibilityNodeInfo n) { return n.getViewIdResourceName(); }
+                public boolean enabled(AccessibilityNodeInfo n) { return n.isEnabled(); }
+                public boolean visible(AccessibilityNodeInfo n) { return n.isVisibleToUser(); }
+                public boolean clickable(AccessibilityNodeInfo n) { return n.isClickable(); }
+                public int childCount(AccessibilityNodeInfo n) { return n.getChildCount(); }
+                public AccessibilityNodeInfo child(AccessibilityNodeInfo n, int i) { return n.getChild(i); }
+                public AccessibilityNodeInfo parent(AccessibilityNodeInfo n) { return n.getParent(); }
+                public AccessibilityNodeInfo copy(AccessibilityNodeInfo n) { return AccessibilityNodeInfo.obtain(n); }
+                public void release(AccessibilityNodeInfo n) { n.recycle(); }
+            });
     private final Runnable tick = () -> { scheduled = false; advance(); };
     @Override protected void onServiceConnected() { instance = this; }
     @Override public void onAccessibilityEvent(AccessibilityEvent event) { schedule(150); }
@@ -37,7 +52,10 @@ public class StopAccessibilityService extends AccessibilityService {
         removeOverlay();
         instance = null; handler.removeCallbacksAndMessages(null); super.onDestroy();
     }
-    void start(List<AppRepository.App> apps) { batchActive = true; queue.clear(); queue.addAll(apps); showOverlay(); next(); }
+    void start(List<AppRepository.App> apps) {
+        confirmLabels = getResources().getStringArray(R.array.force_stop_confirm_labels);
+        batchActive = true; queue.clear(); queue.addAll(apps); showOverlay(); next();
+    }
     void cancelBatch() {
         if (!batchActive) return;
         batchActive = false; queue.clear(); current = null; handler.removeCallbacksAndMessages(null); scheduled = false;
@@ -98,9 +116,12 @@ public class StopAccessibilityService extends AccessibilityService {
             } else if (now - clickedAt > 250) {
                 // Confirmation is only accepted after our force-stop click and a matching warning.
                 AccessibilityNodeInfo warning = find(root, getResources().getStringArray(R.array.force_stop_warning_labels));
-                List<AccessibilityNodeInfo> buttons = root.findAccessibilityNodeInfosByViewId("android:id/button1");
-                boolean confirmed = warning != null && !buttons.isEmpty() && click(buttons.get(0));
-                if (warning != null) warning.recycle(); for (AccessibilityNodeInfo b : buttons) b.recycle();
+                // Compose dialogs have no android:id/button1. Match the exact positive label,
+                // then click its actionable parent, only inside the verified Settings warning.
+                AccessibilityNodeInfo button = warning == null ? null : positiveButtons.find(root,
+                        new String[]{"android:id/button1", settings.activityInfo.packageName + ":id/button1"}, confirmLabels);
+                boolean confirmed = button != null && button.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                if (warning != null) warning.recycle(); if (button != null) button.recycle();
                 if (confirmed) phase = 2;
                 else {
                     try { if ((getPackageManager().getApplicationInfo(current.pkg, 0).flags & ApplicationInfo.FLAG_STOPPED) != 0) { complete(true, 0); return; } }

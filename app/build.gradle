@@ -2,7 +2,10 @@ plugins { id 'com.android.application' }
 android {
     namespace 'com.android.killapps'
     compileSdk 35
-    defaultConfig { applicationId 'com.android.killapps'; minSdk 26; targetSdk 35; versionCode 1; versionName '1.0.0' }
+    defaultConfig {
+        applicationId 'com.android.killapps'; minSdk 26; targetSdk 35; versionCode 2; versionName '1.0.1'
+        manifestPlaceholders = [appLabel: '@string/app_name', accessibilityLabel: '@string/accessibility_label']
+    }
     splits {
         abi {
             enable true
@@ -12,12 +15,19 @@ android {
         }
     }
     buildTypes {
+        debug {
+            if (project.hasProperty('diagnostic')) {
+                applicationIdSuffix '.diagnostic'
+                manifestPlaceholders = [appLabel: '@string/diagnostic_app_name', accessibilityLabel: '@string/diagnostic_accessibility_label']
+            }
+        }
         release {
             // Installable builds without repository secrets. Replace with a private release key for stable upgrades.
             signingConfig signingConfigs.debug
         }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    buildFeatures { buildConfig true }
     bundle { language { enableSplit = false } }
 }
 dependencies {

@@ -74,7 +74,7 @@
     <string name="language_english">English</string>
     <string name="language_chinese">简体中文</string>
     <string name="about">About</string>
-    <string name="about_body">KillApps 1.0.0\nAndroid 8.0 and newer\n\nStops apps using authorized root or accessibility. Force-stopped apps may miss notifications and background tasks until you open them again.\n\nNo ads, analytics, or network access. Lists and settings stay on this device.</string>
+    <string name="about_body">KillApps %1$s\nAndroid 8.0 and newer\n\nStops apps using authorized root or accessibility. Force-stopped apps may miss notifications and background tasks until you open them again.\n\nNo ads, analytics, or network access. Lists and settings stay on this device.</string>
     <string name="results">Task results</string>
     <string name="no_results">No task results yet.</string>
     <string name="result_success">Stopped · %1$s</string>
@@ -91,4 +91,7 @@
     <string name="task_in_progress">Finish or cancel the current task before changing settings.</string>
     <string-array name="force_stop_labels"><item>force stop</item><item>强行停止</item><item>强制停止</item><item>强制结束</item><item>强行结束</item><item>強制停止</item><item>強制終止</item></string-array>
     <string-array name="force_stop_warning_labels"><item>force stop</item><item>misbehave</item><item>停止</item><item>強制</item><item>可能</item></string-array>
+    <string-array name="force_stop_confirm_labels"><item>ok</item><item>okay</item><item>确定</item><item>確認</item><item>確定</item><item>确认</item></string-array>
+    <string name="diagnostic_app_name">KillApps Diagnostic</string>
+    <string name="diagnostic_accessibility_label">KillApps Diagnostic · Stop apps</string>
 </resources>

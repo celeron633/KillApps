@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">KillApps</string>
+    <string name="diagnostic_app_name">KillApps 诊断版</string>
+    <string name="diagnostic_accessibility_label">KillApps 诊断版 · 停止应用</string>
     <string name="accessibility_label">KillApps · 停止应用</string>
     <string name="accessibility_description">仅在你点击开始后，KillApps 才读取系统应用详情页并点击“强行停止”及确认按钮，以停止所选应用。不会读取其他应用内容；你可随时取消任务或关闭此服务。</string>
     <string name="ready">准备就绪</string>
@@ -74,7 +76,7 @@
     <string name="language_english">English</string>
     <string name="language_chinese">简体中文</string>
     <string name="about">关于</string>
-    <string name="about_body">KillApps 1.0.0\n支持 Android 8.0 及以上\n\n使用已授权的 Root 或辅助功能停止应用。强行停止后，应用可能无法接收通知或执行后台任务，直到你再次打开它。\n\n无广告、无统计、不访问网络。名单和设置仅保存在本机。</string>
+    <string name="about_body">KillApps %1$s\n支持 Android 8.0 及以上\n\n使用已授权的 Root 或辅助功能停止应用。强行停止后，应用可能无法接收通知或执行后台任务，直到你再次打开它。\n\n无广告、无统计、不访问网络。名单和设置仅保存在本机。</string>
     <string name="results">任务结果</string>
     <string name="no_results">还没有任务记录。</string>
     <string name="result_success">已停止 · %1$s</string>
