@@ -4,6 +4,8 @@
 
 # KillApps
 
+[![Android CI](https://github.com/celeron633/KillApps/actions/workflows/build.yml/badge.svg)](https://github.com/celeron633/KillApps/actions/workflows/build.yml)
+
 **Android 8.0+ · Material Design 3 · 中文 / English · Apache License 2.0**
 
 [简体中文](#简体中文) | [English](#english) | [界面预览 / Screenshots](#screenshots)
@@ -54,11 +56,20 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 包名：`com.android.killapps`。设备测试可另外构建 `:test-fixture:assembleDebug`；该模块提供可丢弃的停止目标，不会打包进 KillApps。
 
+### 自动构建
+
+推送代码或创建／更新 PR 时，[Android CI](https://github.com/celeron633/KillApps/actions/workflows/build.yml) 会自动运行 Debug 构建、单元测试和 Android Lint；也可以在 Actions 页面点击 **Run workflow** 手动触发。
+
+构建成功后，在对应运行记录的 **Artifacts** 中下载 `KillApps-debug-<运行编号>`，解压后得到可安装的 `KillApps-debug.apk` 与 SHA-256 校验文件，保留 30 天。测试和 Lint 报告单独保存 14 天，构建失败时也会上传已生成的报告。
+
+CI 使用 JDK 17 和 Android SDK 35，缓存 Gradle 依赖，无需配置签名密钥或 Secrets。产物使用 Debug 签名，适合测试安装。
+
 ### 文档与许可证
 
 - [产品流程与筛选规则](docs/product-flow.md)
 - [开发记录与平台限制](docs/development.md)
 - [真机验证记录](docs/testing.md)
+- [CI 配置与产物说明](docs/ci.md)
 
 本项目采用 **Apache License 2.0**，完整条款见 [LICENSE](LICENSE)。
 
@@ -102,6 +113,14 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 Package name: `com.android.killapps`. For device testing, build `:test-fixture:assembleDebug` separately. This module provides a disposable stop target and is not included in the KillApps APK.
 
+### Automated builds
+
+[Android CI](https://github.com/celeron633/KillApps/actions/workflows/build.yml) runs the debug build, unit tests, and Android Lint on pushes and pull requests. You can also select **Run workflow** on the Actions page to start a build manually.
+
+After a successful run, download `KillApps-debug-<run number>` from **Artifacts** and extract the installable `KillApps-debug.apk` and its SHA-256 checksum file. APK artifacts are retained for 30 days. Test and lint reports are uploaded separately for 14 days, including available reports from failed builds.
+
+CI uses JDK 17 and Android SDK 35 with Gradle dependency caching. No signing keys or repository secrets are required. The APK is debug-signed for testing.
+
 ### Documentation and license
 
 The following development documents are currently written in Chinese:
@@ -109,5 +128,6 @@ The following development documents are currently written in Chinese:
 - [Product flow and selection rules](docs/product-flow.md)
 - [Development notes and platform limitations](docs/development.md)
 - [Device verification report](docs/testing.md)
+- [CI configuration and artifacts](docs/ci.md)
 
 Licensed under the **Apache License 2.0**. See [LICENSE](LICENSE) for the full terms.

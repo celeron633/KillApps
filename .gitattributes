@@ -1,0 +1,5 @@
+# Keep scripts and CI configuration usable on Linux after Windows checkouts.
+gradlew text eol=lf
+gradlew.bat text eol=crlf
+*.yml text eol=lf
+*.yaml text eol=lf
