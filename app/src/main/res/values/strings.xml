@@ -1,5 +1,21 @@
 <resources>
     <string name="app_name">KillApps</string>
+    <string name="apps_title">Apps</string>
+    <string name="selection_label">Selected to stop</string>
+    <string name="section_access">Access and operation</string>
+    <string name="section_rules">App rules</string>
+    <string name="section_preferences">Preferences</string>
+    <string name="source_root">Root verified</string>
+    <string name="source_recent">Recent activity</string>
+    <string name="permissions_ready">Access is ready</string>
+    <string name="permissions_needed">Access setup needed</string>
+    <string name="select_all_short">Select all</string>
+    <string name="deselect_all_short">Clear</string>
+    <string name="no_matching_apps">No matching apps</string>
+    <string name="metric_stopped">Stopped</string>
+    <string name="metric_failed">Failed</string>
+    <string name="metric_skipped">Skipped</string>
+    <string name="root_explanation">Root reads the current user’s app processes. Core and protected apps are always kept, regardless of the selected list mode.</string>
     <string name="accessibility_label">KillApps · Stop apps</string>
     <string name="accessibility_description">Only after you tap Start, KillApps reads the system app details screen and clicks Force stop and its confirmation to stop selected apps. It does not read content from other apps. You can cancel the task or disable this service at any time.</string>
     <string name="ready">Ready when you are</string>
@@ -92,6 +108,4 @@
     <string-array name="force_stop_labels"><item>force stop</item><item>强行停止</item><item>强制停止</item><item>强制结束</item><item>强行结束</item><item>強制停止</item><item>強制終止</item></string-array>
     <string-array name="force_stop_warning_labels"><item>force stop</item><item>misbehave</item><item>停止</item><item>強制</item><item>可能</item></string-array>
     <string-array name="force_stop_confirm_labels"><item>ok</item><item>okay</item><item>确定</item><item>確認</item><item>確定</item><item>确认</item></string-array>
-    <string name="diagnostic_app_name">KillApps Diagnostic</string>
-    <string name="diagnostic_accessibility_label">KillApps Diagnostic · Stop apps</string>
 </resources>

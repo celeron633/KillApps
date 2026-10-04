@@ -2,15 +2,15 @@
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
     <!-- Three app tiles, placed within the adaptive-icon safe area. -->
-    <path android:fillColor="#609B7F"
+    <path android:fillColor="#9F86C3"
         android:pathData="M52,28H70C75.52,28 80,32.48 80,38V56C80,61.52 75.52,66 70,66H52C46.48,66 42,61.52 42,56V38C42,32.48 46.48,28 52,28Z" />
-    <path android:fillColor="#9BD0AC"
+    <path android:fillColor="#D0BCFF"
         android:pathData="M45,34H63C68.52,34 73,38.48 73,44V62C73,67.52 68.52,72 63,72H45C39.48,72 35,67.52 35,62V44C35,38.48 39.48,34 45,34Z" />
-    <path android:fillColor="#0B2C22" android:fillAlpha="0.18"
+    <path android:fillColor="#21005D" android:fillAlpha="0.18"
         android:pathData="M39,42H57C63.08,42 68,46.92 68,53V71C68,77.08 63.08,82 57,82H39C32.92,82 28,77.08 28,71V53C28,46.92 32.92,42 39,42Z" />
-    <path android:fillColor="#E5F7E9"
+    <path android:fillColor="#F6EEFF"
         android:pathData="M39,40H55C61.08,40 66,44.92 66,51V67C66,73.08 61.08,78 55,78H39C32.92,78 28,73.08 28,67V51C28,44.92 32.92,40 39,40Z" />
     <!-- Rounded stop mark: simple enough to read at launcher size. -->
-    <path android:fillColor="#285540"
+    <path android:fillColor="#6750A4"
         android:pathData="M43,52H51C52.66,52 54,53.34 54,55V63C54,64.66 52.66,66 51,66H43C41.34,66 40,64.66 40,63V55C40,53.34 41.34,52 43,52Z" />
 </vector>

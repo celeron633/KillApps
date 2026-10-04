@@ -1,7 +1,21 @@
 <resources>
     <string name="app_name">KillApps</string>
-    <string name="diagnostic_app_name">KillApps 诊断版</string>
-    <string name="diagnostic_accessibility_label">KillApps 诊断版 · 停止应用</string>
+    <string name="apps_title">应用</string>
+    <string name="selection_label">本次待停止</string>
+    <string name="section_access">授权与运行</string>
+    <string name="section_rules">应用规则</string>
+    <string name="section_preferences">偏好设置</string>
+    <string name="source_root">Root 实时检测</string>
+    <string name="source_recent">近期活动候选</string>
+    <string name="permissions_ready">权限已就绪</string>
+    <string name="permissions_needed">需要授权</string>
+    <string name="select_all_short">全选</string>
+    <string name="deselect_all_short">取消全选</string>
+    <string name="no_matching_apps">没有匹配的应用</string>
+    <string name="metric_stopped">已停止</string>
+    <string name="metric_failed">失败</string>
+    <string name="metric_skipped">跳过</string>
+    <string name="root_explanation">Root 读取当前用户的实际应用进程。核心与受保护应用始终保留，不受名单模式影响。</string>
     <string name="accessibility_label">KillApps · 停止应用</string>
     <string name="accessibility_description">仅在你点击开始后，KillApps 才读取系统应用详情页并点击“强行停止”及确认按钮，以停止所选应用。不会读取其他应用内容；你可随时取消任务或关闭此服务。</string>
     <string name="ready">准备就绪</string>

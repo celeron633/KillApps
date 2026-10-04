@@ -11,10 +11,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.view.accessibility.*;
 import android.view.*;
-import android.widget.*;
 import android.graphics.PixelFormat;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import java.util.*;
 
 public class StopAccessibilityService extends AccessibilityService {
@@ -27,7 +24,7 @@ public class StopAccessibilityService extends AccessibilityService {
     private boolean scheduled;
     private boolean batchActive;
     private View overlay;
-    private TextView overlayStatus;
+    private StopTaskOverlay overlayContent;
     private String[] confirmLabels;
     private final PositiveButtonFinder<AccessibilityNodeInfo> positiveButtons = new PositiveButtonFinder<>(
             new PositiveButtonFinder.Tree<AccessibilityNodeInfo>() {
@@ -68,7 +65,7 @@ public class StopAccessibilityService extends AccessibilityService {
         if (StopSession.cancelled || queue.isEmpty()) { batchActive = false; current = null; removeOverlay(); StopSession.finish(this, true); return; }
         current = queue.removeFirst(); phase = 0; deadline = android.os.SystemClock.uptimeMillis() + 10000;
         StopSession.currentLabel = current.label; StopSession.statusRes = R.string.stopping_app;
-        if (overlayStatus != null) overlayStatus.setText(localized().getString(R.string.overlay_progress, current.label, StopSession.done, StopSession.total));
+        if (overlayContent != null) overlayContent.update(current.label, StopSession.done, StopSession.total);
         try {
             startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + current.pkg))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -166,26 +163,22 @@ public class StopAccessibilityService extends AccessibilityService {
     }
     private void showOverlay() {
         removeOverlay();
-        Context c = localized(); float density = getResources().getDisplayMetrics().density;
-        LinearLayout row = new LinearLayout(c); row.setGravity(Gravity.CENTER_VERTICAL);
-        int pad = (int)(12 * density); row.setPadding(pad, pad, pad, pad);
-        GradientDrawable background = new GradientDrawable(); background.setColor(Color.rgb(35, 57, 44)); background.setCornerRadius(24 * density); row.setBackground(background);
-        overlayStatus = new TextView(c); overlayStatus.setTextColor(Color.WHITE); overlayStatus.setTextSize(13);
-        row.addView(overlayStatus, new LinearLayout.LayoutParams(0, -2, 1));
-        Button cancel = new Button(c); cancel.setText(R.string.cancel_task); cancel.setText(c.getString(R.string.cancel_task));
-        cancel.setOnClickListener(v -> StopSession.cancel()); row.addView(cancel);
+        float density = getResources().getDisplayMetrics().density;
+        overlayContent = StopTaskOverlay.create(localized(), StopSession::cancel);
+        View row = overlayContent.getView();
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 getResources().getDisplayMetrics().widthPixels - (int)(32 * density), WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL; params.y = (int)(40 * density);
         try { ((WindowManager)getSystemService(WINDOW_SERVICE)).addView(row, params); overlay = row; }
-        catch (Exception e) { android.util.Log.w("KillApps", "Overlay unavailable", e); overlayStatus = null; }
+        catch (Exception e) { android.util.Log.w("KillApps", "Overlay unavailable", e); overlayContent.dispose(); overlayContent = null; }
     }
     private void removeOverlay() {
         if (overlay != null) {
             try { ((WindowManager)getSystemService(WINDOW_SERVICE)).removeView(overlay); } catch (Exception ignored) { }
-            overlay = null; overlayStatus = null;
+            overlay = null;
         }
+        if (overlayContent != null) { overlayContent.dispose(); overlayContent = null; }
     }
 }

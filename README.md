@@ -14,13 +14,13 @@
 
 ## 界面预览 / Screenshots
 
-| 应用列表 / App list | 设置 / Settings |
-| :---: | :---: |
-| <img src="docs/home-zh.png" width="280" alt="KillApps 中文首页：运行应用、类型筛选与批量停止 / Chinese app list with filters and batch stop"> | <img src="docs/settings-zh.png" width="280" alt="KillApps 中文设置：授权、停止方式、黑白名单与语言 / Chinese settings for access, stop methods, lists and language"> |
+<p align="center">
+  <img src="docs/compose-home-zh.png" width="300" alt="KillApps Compose 中文首页：紫白 Material 3 主题、应用筛选和批量停止 / Compose home screen with purple Material 3 styling, app filters and batch stop">
+</p>
 
 ## 简体中文
 
-KillApps 是一款支持 **Android 8.0 及以上**的开源应用管理工具。通过 Root 或辅助功能批量停止应用，提供用户／系统应用筛选、黑白名单和逐项处理结果。
+KillApps 是一款支持 **Android 8.0 及以上**的开源应用管理工具。通过 Root 或辅助功能批量停止应用，提供用户／系统应用筛选、黑白名单和逐项处理结果。新版界面采用 Jetpack Compose 与紫白 Material 3 主题，[查看迁移说明与预览](docs/compose-migration.md)。
 
 ### 功能
 
@@ -72,6 +72,7 @@ CI 使用 JDK 17 和 Android SDK 35，缓存 Gradle 依赖，无需配置 Secret
 - [开发记录与平台限制](docs/development.md)
 - [真机验证记录](docs/testing.md)
 - [CI 配置与产物说明](docs/ci.md)
+- [Compose 界面与紫白主题](docs/compose-migration.md)
 
 本项目采用 **Apache License 2.0**，完整条款见 [LICENSE](LICENSE)。
 
@@ -79,7 +80,7 @@ CI 使用 JDK 17 和 Android SDK 35，缓存 Gradle 依赖，无需配置 Secret
 
 ## English
 
-KillApps is an open-source app management tool for **Android 8.0 and newer**. It stops selected apps in batches using root or accessibility, with user/system app filters, whitelists, blacklists, and per-app results.
+KillApps is an open-source app management tool for **Android 8.0 and newer**. It stops selected apps in batches using root or accessibility, with user/system app filters, whitelists, blacklists, and per-app results. The new UI uses Jetpack Compose with a purple and white Material 3 theme; see the [migration notes and preview](docs/compose-migration.md).
 
 ### Features
 
@@ -133,5 +134,6 @@ The following development documents are currently written in Chinese:
 - [Development notes and platform limitations](docs/development.md)
 - [Device verification report](docs/testing.md)
 - [CI configuration and artifacts](docs/ci.md)
+- [Compose UI and purple theme](docs/compose-migration.md)
 
 Licensed under the **Apache License 2.0**. See [LICENSE](LICENSE) for the full terms.
