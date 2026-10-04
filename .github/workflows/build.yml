@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build APK, test and lint
+    name: Build three APKs, test and lint
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
@@ -41,22 +41,42 @@ jobs:
         uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
 
       - name: Build, test and lint
-        run: bash ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
+        run: bash ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:assembleRelease :app:testDebugUnitTest :app:lintDebug :app:lintRelease
 
-      - name: Prepare APK and checksum
+      - name: Prepare APKs and checksums
         run: |
-          mkdir -p dist
-          cp app/build/outputs/apk/debug/app-debug.apk dist/KillApps-debug.apk
-          cd dist
-          sha256sum KillApps-debug.apk > SHA256SUMS.txt
+          VERSION=$(jq -r '.elements[0].versionName' app/build/outputs/apk/release/output-metadata.json)
+          for BUILD_TYPE in debug release; do
+            mkdir -p "dist/$BUILD_TYPE"
+            for ABI in armeabi-v7a arm64-v8a universal; do
+              case "$ABI" in
+                armeabi-v7a) LABEL=arm32 ;;
+                arm64-v8a) LABEL=arm64 ;;
+                universal) LABEL=universal ;;
+              esac
+              cp "app/build/outputs/apk/$BUILD_TYPE/app-$ABI-$BUILD_TYPE.apk" "dist/$BUILD_TYPE/KillApps-$VERSION-$LABEL.apk"
+            done
+            (cd "dist/$BUILD_TYPE" && sha256sum ./*.apk > SHA256SUMS.txt)
+          done
 
       - name: Upload installable debug APK
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: KillApps-debug-${{ github.run_number }}
           path: |
-            dist/KillApps-debug.apk
-            dist/SHA256SUMS.txt
+            dist/debug/*.apk
+            dist/debug/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+      - name: Upload installable release APKs
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: KillApps-release-${{ github.run_number }}
+          path: |
+            dist/release/*.apk
+            dist/release/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
           compression-level: 0
@@ -70,5 +90,51 @@ jobs:
             app/build/reports/tests/testDebugUnitTest/
             app/build/test-results/testDebugUnitTest/
             app/build/reports/lint-results-debug.*
+            app/build/reports/lint-results-release.*
           if-no-files-found: ignore
           retention-days: 14
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Check out release notes
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Download release APKs
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: KillApps-release-${{ github.run_number }}
+          path: dist/release
+
+      - name: Create release and upload APKs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          shopt -s nullglob
+          APKS=(dist/release/*.apk)
+          test "${#APKS[@]}" -eq 3
+          for LABEL in arm32 arm64 universal; do
+            MATCHES=(dist/release/KillApps-*-$LABEL.apk)
+            test "${#MATCHES[@]}" -eq 1
+          done
+          (cd dist/release && sha256sum --check SHA256SUMS.txt)
+          if gh release view "$TAG" --json isDraft --jq '.isDraft' > release-state.txt; then
+            if [ "$(cat release-state.txt)" != "true" ]; then
+              echo "Release $TAG is already published; refusing to replace its assets."
+              exit 1
+            fi
+          else
+            gh release create "$TAG" --verify-tag --draft --title "KillApps ${TAG#v}" --notes-file .github/release-notes.md
+          fi
+          gh release upload "$TAG" dist/release/*.apk dist/release/SHA256SUMS.txt --clobber
+          gh release edit "$TAG" --draft=false --latest

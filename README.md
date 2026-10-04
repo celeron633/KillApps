@@ -45,24 +45,26 @@ KillApps 是一款支持 **Android 8.0 及以上**的开源应用管理工具。
 
 ### 构建与安装
 
+直接下载安装包请前往 [GitHub Releases](https://github.com/celeron633/KillApps/releases/latest)。提供 **arm32、arm64、universal** 三种包，不确定设备架构时选择 universal。当前版本使用测试证书签署 Release 构建，安装前请查看 Release 页的签名说明。
+
 使用 Android Studio 打开项目，选择 **JDK 17** 并安装 **Android SDK 35**。项目使用 AGP 8.7.3 和 Gradle 8.9，已包含 Gradle Wrapper；`local.properties` 指向本机 SDK。
 
 在 Windows PowerShell 中执行：
 
 ```powershell
 ./gradlew.bat :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb install -r app/build/outputs/apk/debug/app-universal-debug.apk
 ```
 
 包名：`com.android.killapps`。设备测试可另外构建 `:test-fixture:assembleDebug`；该模块提供可丢弃的停止目标，不会打包进 KillApps。
 
 ### 自动构建
 
-推送代码或创建／更新 PR 时，[Android CI](https://github.com/celeron633/KillApps/actions/workflows/build.yml) 会自动运行 Debug 构建、单元测试和 Android Lint；也可以在 Actions 页面点击 **Run workflow** 手动触发。
+推送代码或创建／更新 PR 时，[Android CI](https://github.com/celeron633/KillApps/actions/workflows/build.yml) 会自动运行 Debug／Release 构建、单元测试和两种构建的 Android Lint；也可以在 Actions 页面点击 **Run workflow** 手动触发。
 
-构建成功后，在对应运行记录的 **Artifacts** 中下载 `KillApps-debug-<运行编号>`，解压后得到可安装的 `KillApps-debug.apk` 与 SHA-256 校验文件，保留 30 天。测试和 Lint 报告单独保存 14 天，构建失败时也会上传已生成的报告。
+构建成功后，在对应运行记录的 **Artifacts** 中下载 `KillApps-debug-<运行编号>` 或 `KillApps-release-<运行编号>`，每份包含 arm32、arm64、universal 三个 APK 与 SHA-256 校验文件，保留 30 天。测试和 Lint 报告单独保存 14 天，构建失败时也会上传已生成的报告。
 
-CI 使用 JDK 17 和 Android SDK 35，缓存 Gradle 依赖，无需配置签名密钥或 Secrets。产物使用 Debug 签名，适合测试安装。
+CI 使用 JDK 17 和 Android SDK 35，缓存 Gradle 依赖，无需配置 Secrets。Release 构建未开启 debuggable，但暂时使用测试证书签名。推送 `v*` 标签时，CI 在全部检查通过后自动上传三种 Release APK 并发布 GitHub Release。
 
 ### 文档与许可证
 
@@ -102,24 +104,26 @@ Without root, candidates are based on activity in the last 24 hours and **are no
 
 ### Build and install
 
+Download APKs directly from [GitHub Releases](https://github.com/celeron633/KillApps/releases/latest). **arm32, arm64, and universal** packages are available; choose universal if unsure. Current release builds use a test signing certificate; read the signing notes on the release page before installing.
+
 Open the project in Android Studio, select **JDK 17**, and install **Android SDK 35**. The project uses AGP 8.7.3 and Gradle 8.9, with the Gradle Wrapper included. Set the local SDK path in `local.properties`.
 
 Run in Windows PowerShell:
 
 ```powershell
 ./gradlew.bat :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb install -r app/build/outputs/apk/debug/app-universal-debug.apk
 ```
 
 Package name: `com.android.killapps`. For device testing, build `:test-fixture:assembleDebug` separately. This module provides a disposable stop target and is not included in the KillApps APK.
 
 ### Automated builds
 
-[Android CI](https://github.com/celeron633/KillApps/actions/workflows/build.yml) runs the debug build, unit tests, and Android Lint on pushes and pull requests. You can also select **Run workflow** on the Actions page to start a build manually.
+[Android CI](https://github.com/celeron633/KillApps/actions/workflows/build.yml) builds debug and release variants, runs unit tests, and checks Android Lint for both variants on pushes and pull requests. You can also select **Run workflow** on the Actions page to start a build manually.
 
-After a successful run, download `KillApps-debug-<run number>` from **Artifacts** and extract the installable `KillApps-debug.apk` and its SHA-256 checksum file. APK artifacts are retained for 30 days. Test and lint reports are uploaded separately for 14 days, including available reports from failed builds.
+After a successful run, download `KillApps-debug-<run number>` or `KillApps-release-<run number>` from **Artifacts**. Each contains arm32, arm64, and universal APKs plus SHA-256 checksums, retained for 30 days. Test and lint reports are uploaded separately for 14 days, including available reports from failed builds.
 
-CI uses JDK 17 and Android SDK 35 with Gradle dependency caching. No signing keys or repository secrets are required. The APK is debug-signed for testing.
+CI uses JDK 17 and Android SDK 35 with Gradle dependency caching. No repository secrets are required. Release builds are non-debuggable but currently use a test signing certificate. Pushing a `v*` tag publishes a GitHub Release with all three release APKs after the checks pass.
 
 ### Documentation and license
 
