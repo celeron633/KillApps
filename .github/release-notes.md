@@ -2,6 +2,16 @@
 
 支持 Android 8.0+，包名 `com.android.killapps`。提供 Root 优先／辅助功能批量停止、用户与系统应用筛选、黑白名单、中英双语及 MD3 明暗主题。
 
+### 本次更新 / What's new
+
+- 界面迁移到 Jetpack Compose，采用紫白 Material 3 配色，更新设置、名单、授权面板与任务进度浮条。
+- 调整应用、名单模式与任务结果图标，保留中英双语及系统明暗主题。
+- 修复 Android 16 / LineageOS 23.2 新版系统确认弹窗无法点击的问题。
+
+- Migrated the UI to Jetpack Compose with a purple and white Material 3 theme, including settings, lists, access setup, and the task overlay.
+- Refined navigation and result icons while retaining Chinese/English and light/dark themes.
+- Fixed force-stop confirmation on Android 16 / LineageOS 23.2.
+
 ### 下载 / Downloads
 
 | APK | 适用设备 / Devices |
